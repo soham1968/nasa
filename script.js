@@ -49,10 +49,14 @@ function addSearchToHistory() {
   historyList.innerHTML = "";
   const searches = JSON.parse(localStorage.getItem("searches")) || [];
   searches.forEach((date) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = date;
-    listItem.addEventListener("click", () => getImageOfTheDay(date));
-    historyList.appendChild(listItem);
+    fetchNASAImageOfTheDay(date)
+      .then((data) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${date} - ${data.title}`;
+        listItem.addEventListener("click", () => getImageOfTheDay(date));
+        historyList.appendChild(listItem);
+      })
+      .catch((error) => console.error("Error fetching image data:", error));
   });
 }
 
